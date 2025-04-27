@@ -1331,6 +1331,7 @@ function http_referer()
 {
     $referer = param('referer');
     empty($referer) and $referer = _SERVER('HTTP_REFERER');
+    $referer = (string) $referer;
     if (FALSE !== strpos($referer, url('user-login')) || FALSE !== strpos($referer, url('user-logout')) || FALSE !== strpos($referer, url('user-create'))) {
         $referer = http_url_path();
     }
