@@ -412,7 +412,7 @@ function db_array_to_update_sqladd($arr)
     $s = '';
     foreach ($arr as $k => $v) {
         $v = isset($v) ? $v : '';
-        $v = addslashes($v);
+        $v = addslashes((string) $v);
         $op = substr($k, -1);
         if ('+' == $op || '-' == $op) {
             $k = substr($k, 0, -1);
