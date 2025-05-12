@@ -325,26 +325,21 @@ function sess_start()
     // session_set_save_handler('sess_open', 'sess_close', 'sess_read', 'sess_write', 'sess_destroy', 'sess_gc');
 
     $sessionHandler = new class() implements SessionHandlerInterface {
-        public function open(string $save_path, string $session_name): bool {
+	public function open(string $save_path, string $session_name): bool {
             return sess_open($save_path, $session_name);
         }
-    
         public function close(): bool {
             return sess_close();
-      }
-    
+	}
         public function read(string $sid): string|false {
             return sess_read($sid);
         }
-    
         public function write(string $sid, string $data): bool {
             return sess_write($sid, $data);
         }
-    
         public function destroy(string $sid): bool {
             return sess_destroy($sid);
         }
-    
         public function gc(int $maxlifetime): int|false {
             return sess_gc($maxlifetime);
         }
