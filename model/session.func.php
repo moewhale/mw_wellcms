@@ -123,138 +123,6 @@ function session_data_delete($cond = array(), $d = NULL)
 
 //--------------------------强相关--------------------------
 
-class MyCustomSessionHandler implements SessionHandlerInterface
-{
-    private $db;
-    private $conf;
-    private $savePath;
-    private $sessionName;
-
-    public function __construct($db_connection, array $config)
-    {
-        $this->db = $db_connection; // 注入数据库连接
-        $this->conf = $config;       // 注入配置
-        
-        // 在这里可以进行其他初始化，例如设置表名等
-        // $this->sessionTable = $this->conf['session_table_name'] ?? 'sessions';
-    }
-
-    /**
-     * 打开会话存储。对应旧的 sess_open。
-     * @param string $savePath 会话保存路径 (通常由 session.save_path 定义，但自定义处理器可能以不同方式使用它)
-     * @param string $sessionName 会话名称 (例如 PHPSESSID)
-     * @return bool
-     */
-    public function open($savePath, $sessionName): bool
-    {
-        $this->savePath = $savePath;
-        $this->sessionName = $sessionName;
-        // 例如：检查数据库连接是否有效
-        // if ($this->db) {
-        //     return true;
-        // }
-        // return false;
-        // 对应您原来的 sess_open 逻辑
-        // error_log("Session opened. Path: $savePath, Name: $sessionName");
-        return true;
-    }
-
-    /**
-     * 关闭会话存储。对应旧的 sess_close。
-     * @return bool
-     */
-    public function close(): bool
-    {
-        // 例如：可以释放数据库连接，但通常不在这里做，除非连接是专门为此会话打开的
-        // error_log("Session closed.");
-        // 对应您原来的 sess_close 逻辑
-        // $this->db = null; // 如果需要
-        return true;
-    }
-
-    /**
-     * 读取会话数据。对应旧的 sess_read。
-     * @param string $sessionId 会话ID
-     * @return string|false 返回会话数据字符串，如果读取失败或无数据则返回空字符串""或false。
-     */
-    public function read($sessionId): string|false
-    {
-        // 对应您原来的 sess_read 逻辑
-        // 示例：从数据库读取
-        // $stmt = $this->db->prepare("SELECT data FROM sessions WHERE id = :id");
-        // $stmt->bindParam(':id', $sessionId);
-        // if ($stmt->execute()) {
-        //     $data = $stmt->fetchColumn();
-        //     return $data ?: ''; // 如果没有数据，返回空字符串
-        // }
-        // return ''; // 或 false 表示失败
-
-        // error_log("Session read: $sessionId");
-        return ''; // 确保返回 string
-    }
-
-    /**
-     * 写入会话数据。对应旧的 sess_write。
-     * @param string $sessionId 会话ID
-     * @param string $sessionData 会话数据
-     * @return bool
-     */
-    public function write($sessionId, $sessionData): bool
-    {
-        // 对应您原来的 sess_write 逻辑
-        // 示例：写入数据库
-        // $timestamp = time();
-        // $stmt = $this->db->prepare(
-        //    "REPLACE INTO sessions (id, data, last_access) VALUES (:id, :data, :access)"
-        // );
-        // $stmt->bindParam(':id', $sessionId);
-        // $stmt->bindParam(':data', $sessionData);
-        // $stmt->bindParam(':access', $timestamp, PDO::PARAM_INT);
-        // return $stmt->execute();
-
-        // error_log("Session write: $sessionId, Data: $sessionData");
-        return true;
-    }
-
-    /**
-     * 销毁会话。对应旧的 sess_destroy。
-     * @param string $sessionId 会话ID
-     * @return bool
-     */
-    public function destroy($sessionId): bool
-    {
-        // 对应您原来的 sess_destroy 逻辑
-        // 示例：从数据库删除
-        // $stmt = $this->db->prepare("DELETE FROM sessions WHERE id = :id");
-        // $stmt->bindParam(':id', $sessionId);
-        // return $stmt->execute();
-
-        // error_log("Session destroy: $sessionId");
-        return true;
-    }
-
-    /**
-     * 清理过期的会话 (垃圾回收)。对应旧的 sess_gc。
-     * @param int $maxLifetime 会话最大生存时间 (秒)
-     * @return int|false 返回成功删除的会话数量，或在失败时返回 false。
-     */
-    public function gc($maxLifetime): int|false
-    {
-        // 对应您原来的 sess_gc 逻辑
-        // 示例：从数据库删除过期会话
-        // $past = time() - $maxLifetime;
-        // $stmt = $this->db->prepare("DELETE FROM sessions WHERE last_access < :past");
-        // $stmt->bindParam(':past', $past, PDO::PARAM_INT);
-        // if ($stmt->execute()) {
-        //     return $stmt->rowCount(); // 返回删除的行数
-        // }
-        // return false;
-
-        // error_log("Session garbage collection, maxlifetime: $maxLifetime");
-        return 0; // 返回删除的会话数量
-    }
-}
-
 function sess_open($save_path, $session_name)
 {
     //echo "sess_open($save_path,$session_name) \r\n";
@@ -435,61 +303,62 @@ function sess_gc($maxlifetime)
 
 function sess_start()
 {
-    global $conf, $sid, $g_session, $db; // 假设 $db 是可访问的
-
+    global $conf, $sid, $g_session;
     ini_set('session.name', $conf['cookie_pre'] . 'sid');
     ini_set('session.use_cookies', TRUE);
     ini_set('session.use_only_cookies', TRUE);
     ini_set('session.cookie_domain', $conf['cookie_domain']);
+    // 为空则表示当前目录和子目录
     ini_set('session.cookie_path', $conf['cookie_path']);
-    ini_set('session.cookie_secure', FALSE); // 考虑在生产环境中设为 TRUE (如果全站 HTTPS)
+    // 打开后只有通过 https 才有效
+    ini_set('session.cookie_secure', FALSE);
     ini_set('session.cookie_lifetime', 8640000);
+    // 打开后 js 获取不到 HTTP 设置的 cookie, 有效防止 XSS，对于安全很重要，除非有 BUG，否则不要关闭。
     ini_set('session.cookie_httponly', TRUE);
+    // 活动时间
     ini_set('session.gc_maxlifetime', $conf['online_hold_time']);
+    // 垃圾回收概率 = gc_probability/gc_divisor
     ini_set('session.gc_probability', 1);
+    // 垃圾回收时间 5 秒，在线人数 * 10 / 每1000个请求回收一次垃圾
     ini_set('session.gc_divisor', 1000);
 
-    // 创建会话处理器实例，并注入依赖项
-    // 您需要确保 $db 和 $conf 在这里是可用的。
-    // 如果 $db 不是全局的，您可能需要从其他地方获取它或作为参数传递给 sess_start()
-    if (!isset($db)) {
-        // 处理 $db 未定义的情况，例如尝试连接或抛出错误
-        // error_log("数据库连接未在 sess_start 中初始化。");
-        // return false; // 或者抛出异常
-    }
-    $sessionHandler = new MyCustomSessionHandler($db, $conf); // 注入 $db 和 $conf
+    // session_set_save_handler('sess_open', 'sess_close', 'sess_read', 'sess_write', 'sess_destroy', 'sess_gc');
 
-    // 设置会话处理器
-    // 第二个参数 true 表示在对象析构时自动调用 session_write_close()，
-    // 这通常是期望的行为，可以替代手动注册 session_write_close。
-    session_set_save_handler($sessionHandler, true);
-
-    // 关于 register_shutdown_function 和 chdir:
-    // 当使用对象作为会话处理器时，PHP 通常会自动处理会话的写入和关闭。
-    // 您可能不再需要手动调用 register_shutdown_function('session_write_close');
-    // SessionHandlerInterface 的 close() 方法会在脚本结束时被调用。
-    // 如果之前的 chdir 是为了确保 shutdown 函数中的相对路径正确，
-    // 并且您的新会话处理器方法中也使用了相对路径，那么这个 chdir 可能仍然需要。
-    // 最佳实践是在会话处理器方法中使用绝对路径或基于 APP_PATH 的路径。
-    if (isset($conf['url_rewrite_on']) && $conf['url_rewrite_on'] > 1 && function_exists('chdir') && defined('APP_PATH')) {
-        chdir(APP_PATH);
-    }
+    $sessionHandler = new class() implements SessionHandlerInterface {
+        public function open(string $save_path, string $session_name): bool {
+            return sess_open($save_path, $session_name);
+        }
     
-    // 考虑移除或重新评估这行：
-    // register_shutdown_function('session_write_close');
-    // PHP 应该会自动处理。如果您的 MyCustomSessionHandler::close() 或 MyCustomSessionHandler::write()
-    // 方法依赖于 $db，而您担心 $db 可能在这些方法被PHP自动调用前被释放，
-    // 那么确保 $db 的生命周期足够长，或者 MyCustomSessionHandler 负责管理 $db 的连接状态。
-    // 通常，依赖注入的 $db 对象应该在 MyCustomSessionHandler 的方法被调用时仍然有效。
-    // 如果仍然遇到 $db 提前释放的问题，这通常指示了应用层面资源管理的问题。
+        public function close(): bool {
+            return sess_close();
+      }
+    
+        public function read(string $sid): string|false {
+            return sess_read($sid);
+        }
+    
+        public function write(string $sid, string $data): bool {
+            return sess_write($sid, $data);
+        }
+    
+        public function destroy(string $sid): bool {
+            return sess_destroy($sid);
+        }
+    
+        public function gc(int $maxlifetime): int|false {
+            return sess_gc($maxlifetime);
+        }
+    };
+    
+    session_set_save_handler($sessionHandler);
 
-    // 另一种现代的做法是使用 session_register_shutdown()，它专门用于注册会话关闭函数。
-    // 但由于我们已经将处理器设置为对象，PHP会自动处理。
+    // register_shutdown_function 会丢失当前目录，需要 chdir(APP_PATH)
+    $conf['url_rewrite_on'] > 1 and function_exists('chdir') and chdir(APP_PATH);
+    // 这个必须有，否则 ZEND 会提前释放 $db 资源
+    register_shutdown_function('session_write_close');
 
     session_start();
     $sid = session_id();
-
-    // $g_session 可以根据需要在这里初始化或赋值
 
     return $sid;
 }
