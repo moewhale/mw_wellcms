@@ -29,7 +29,7 @@ CREATE TABLE `wellcms_user` (
   UNIQUE KEY (`username`),
   UNIQUE KEY (`email`), # 升级的时候可能为空
   KEY gid (gid)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4;
 INSERT INTO `wellcms_user` SET uid=1, gid=1, email='admin@admin.com', username='admin',`password`='d98bb50e808918dd45a8d92feafc4fa3',salt='123456';
 
 # 用户组
@@ -402,3 +402,4 @@ CREATE TABLE `wellcms_website_link` (
   KEY `rank` (`rank`) # 排序
 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
