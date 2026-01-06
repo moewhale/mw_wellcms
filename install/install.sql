@@ -83,7 +83,7 @@ CREATE TABLE `wellcms_group` (
   #`allowdelivery` tinyint(1) NOT NULL default '0',	# 允许发货
   # 信息message 通知notice 活动activity
   PRIMARY KEY (gid)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `wellcms_group` (`gid`, `name`, `creditsfrom`, `creditsto`, `allowread`, `allowthread`, `allowpost`, `allowattach`, `allowdown`, `allowtop`, `allowupdate`, `allowdelete`, `allowmove`, `allowbanuser`, `allowdeleteuser`, `allowviewip`, `intoadmin`, `managesetting`, `managecontent`, `manageforum`, `managecategory`, `manageuser`, `manageplugin`, `manageother`, `managecreatethread`, `manageupdatethread`, `managedeletethread`, `managecomment`, `managepage`, `managesticky`, `managegroup`, `manageupdateuser`, `managecreateuser`, `manageupdategroup`, `managedeleteuser`, `allowuserdelete`, `allowpublish`, `publishverify`, `commentverify`) VALUES
 (0, '游客组', 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1),
@@ -116,7 +116,7 @@ CREATE TABLE `wellcms_session` (
   KEY `ip` (`ip`),
   KEY `last_date` (`last_date`),
   KEY `uid_last_date` (`uid`, `last_date`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_session_data`;
 CREATE TABLE `wellcms_session_data` (
@@ -124,7 +124,7 @@ CREATE TABLE `wellcms_session_data` (
   `last_date` int(11) unsigned NOT NULL default '0',	# 上次活动时间
   `data` text NOT NULL,					# 存超大数据
   PRIMARY KEY (`sid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 # 持久的 key value 数据存储, ttserver, mysql
 DROP TABLE IF EXISTS `wellcms_kv`;
@@ -133,7 +133,7 @@ CREATE TABLE `wellcms_kv` (
   `v` mediumtext NOT NULL,
   `expiry` int(11) unsigned NOT NULL default '0',		# 过期时间
   PRIMARY KEY(`k`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO `wellcms_kv` (`k`, `v`, `expiry`) VALUES ('setting', '{"conf":{"name":"WellCMS Oriental Lion","version":"2.3.0","official_version":"2.3.0","last_version":"0","version_date":"0","installed":0,"setting":{"website_mode":2,"tpl_mode":0,"map":"map","verify_thread":0,"verify_post":0,"verify_special":0,"thumbnail_on":1,"save_image_on":1},"picture_size":{"width":400,"height":280},"theme":"","theme_child":"[]","shield":[],"index_stickys":0,"index_flags":"0","index_flagstr":""}}', 0);
 
 # 缓存表 用来保存临时数据
@@ -143,7 +143,7 @@ CREATE TABLE `wellcms_cache` (
   `v` mediumtext NOT NULL,
   `expiry` int(11) unsigned NOT NULL default '0',		# 过期时间
   PRIMARY KEY(`k`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_forum`;
 CREATE TABLE `wellcms_forum` (
@@ -180,7 +180,7 @@ CREATE TABLE `wellcms_forum` (
   `brief` text NOT NULL, # 版块简介 允许HTML，SEO description
   `announcement` text NOT NULL, # 版块公告 允许HTML
   PRIMARY KEY (`fid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_forum_access`;
 CREATE TABLE `wellcms_forum_access` (
@@ -192,7 +192,7 @@ CREATE TABLE `wellcms_forum_access` (
   `allowattach` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `allowdown` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`fid`,`gid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_attach`;
 CREATE TABLE `wellcms_website_attach` (
@@ -219,7 +219,7 @@ CREATE TABLE `wellcms_website_attach` (
   KEY `tid` (`tid`),  # 主题附件
   KEY `pid` (`pid`),  # 评论附件
   KEY `uid` (`uid`)   # 用户附件
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_data`;
 CREATE TABLE `wellcms_website_data` (
@@ -228,7 +228,7 @@ CREATE TABLE `wellcms_website_data` (
   `attach_on` tinyint(1) unsigned NOT NULL DEFAULT '0',  # 文件上传完成更新这里 0本地储存 1云储存 2图床
   `message` longtext NOT NULL,
   PRIMARY KEY (`tid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_flag`;
 CREATE TABLE `wellcms_website_flag` (
@@ -244,7 +244,7 @@ CREATE TABLE `wellcms_website_flag` (
   PRIMARY KEY (`flagid`),
   KEY `name` (`name`,`fid`),
   KEY `fid` (`fid`,`display`,`flagid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_flag_thread`;
 CREATE TABLE `wellcms_website_flag_thread` (
@@ -257,7 +257,7 @@ CREATE TABLE `wellcms_website_flag_thread` (
   PRIMARY KEY (`id`),
   KEY `tid` (`tid`),
   KEY `flagid` (`flagid`,`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_operate`;
 CREATE TABLE `wellcms_website_operate` (
@@ -273,7 +273,7 @@ CREATE TABLE `wellcms_website_operate` (
   PRIMARY KEY (`logid`),
   KEY `uid_logid` (`uid`,`logid`),
   KEY `tid` (`tid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_comment`;
 CREATE TABLE `wellcms_website_comment` (
@@ -291,7 +291,7 @@ CREATE TABLE `wellcms_website_comment` (
   `attach_on` tinyint(1) unsigned NOT NULL DEFAULT '0',  # 文件上传完成更新这里 0本地储存 1云储存 2图床
   `message` longtext NOT NULL,
   PRIMARY KEY (`pid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_comment_pid`;
 CREATE TABLE `wellcms_website_comment_pid` (
@@ -302,7 +302,7 @@ CREATE TABLE `wellcms_website_comment_pid` (
   PRIMARY KEY (`pid`),
   KEY `tid_pid` (`tid`,`pid`),
   KEY `uid_pid` (`uid`,`pid`)  # 个人回复或个人微博
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_thread`;
 CREATE TABLE `wellcms_website_thread` (
@@ -332,7 +332,7 @@ CREATE TABLE `wellcms_website_thread` (
   `description` varchar(120) NOT NULL DEFAULT '', # SEO description 外链接写这里 直接跳出去了
   `image_url` varchar(120) NOT NULL DEFAULT '', # 图床文件网址
   PRIMARY KEY (`tid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_thread_tid`;
 CREATE TABLE `wellcms_website_thread_tid` (
@@ -347,7 +347,7 @@ CREATE TABLE `wellcms_website_thread_tid` (
   #KEY `fid_lastpid` (`fid`,`lastpid`),  # 回复时间排序主题
   #KEY `fid_rank` (`fid`,`rank`), # 插件形式出现
   KEY `uid_tid` (`uid`,`tid`) # 用户主题 & 清理
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 # 单页
 DROP TABLE IF EXISTS `wellcms_website_page`;
@@ -357,7 +357,7 @@ CREATE TABLE `wellcms_website_page` (
   `fid` int(11) unsigned NOT NULL DEFAULT '0', # 版块fid
   PRIMARY KEY (`tid`),
   KEY `fid_rank` (`fid`,`rank`) # 主题排序
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_thread_sticky`;
 CREATE TABLE `wellcms_website_thread_sticky` (
@@ -368,7 +368,7 @@ CREATE TABLE `wellcms_website_thread_sticky` (
   PRIMARY KEY (`tid`),
   KEY `sticky_tid` (`sticky`,`tid`),
   KEY `fid_sticky` (`fid`,`sticky`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_tag`;
 CREATE TABLE `wellcms_website_tag` (
@@ -378,7 +378,7 @@ CREATE TABLE `wellcms_website_tag` (
   `icon` int(11) unsigned NOT NULL DEFAULT '0',  # 标签缩略图 时间戳 tagid为图片名
   PRIMARY KEY (`tagid`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `wellcms_website_tag_thread`;
 CREATE TABLE `wellcms_website_tag_thread` (
@@ -388,7 +388,7 @@ CREATE TABLE `wellcms_website_tag_thread` (
 PRIMARY KEY (`id`),
 KEY `tid` (`tid`),
 KEY `tagid_id` (`tagid`,`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 # 友情链接
 DROP TABLE IF EXISTS `wellcms_website_link`;
@@ -400,4 +400,5 @@ CREATE TABLE `wellcms_website_link` (
   `create_date` int(11) unsigned NOT NULL DEFAULT '0', # 创建时间
   PRIMARY KEY (`id`),
   KEY `rank` (`rank`) # 排序
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
