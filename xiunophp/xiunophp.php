@@ -40,7 +40,7 @@ if (IN_CMD) {
 
 include XIUNOPHP_PATH . 'db_mysql.class.php';
 include XIUNOPHP_PATH . 'db_pdo_mysql.class.php';
-include XIUNOPHP_PATH . 'cache_apc.class.php';
+include XIUNOPHP_PATH . 'cache_apcu.class.php';
 include XIUNOPHP_PATH . 'cache_memcached.class.php';
 include XIUNOPHP_PATH . 'cache_mysql.class.php';
 include XIUNOPHP_PATH . 'cache_redis.class.php';
@@ -122,5 +122,6 @@ unset($conf['cache']['mysql']['db']); // 用完清除，防止保存到配置文
 
 $_SERVER['db'] = $db;
 $_SERVER['cache'] = $cache;
+
 
 ?>
