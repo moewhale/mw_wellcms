@@ -53,7 +53,7 @@ return array(
         'yac' => array(
             'cachepre' => 'well_',
         ),
-        'apc' => array(
+        'apcu' => array(
             'cachepre' => 'well_',
         ),
         'mysql' => array(
@@ -136,4 +136,5 @@ return array(
     'cache_thread' => 1, // 详情页 0直接读取 1缓存中读取 互动很强的站点建议0
     'img_base64' => 0, // 详情src支持base64图片 1支持
 );
+
 ?>
