@@ -766,7 +766,7 @@ function https_post($url, $post = '', $cookie = '', $timeout = 30, $method = 'PO
         return xn_error(-1, 'Errno' . curl_error($ch));
     }
     if (!$data) {
-        curl_close($ch);
+        is_resource($ch) and curl_close($ch);
         return '';
     }
 
@@ -780,7 +780,7 @@ function https_post($url, $post = '', $cookie = '', $timeout = 30, $method = 'PO
         curl_setopt($ch, CURLOPT_HEADER, false);
         $data = curl_exec($ch);
     }
-    curl_close($ch);
+    is_resource($ch) and curl_close($ch);
     return $data;
 }
 
@@ -820,7 +820,7 @@ function http_multi_get($urls)
     foreach ($urls as $i => $url) {
         $data[$i] = curl_multi_getcontent($conn[$i]);
         curl_multi_remove_handle($multi_handle, $conn[$i]);
-        curl_close($conn[$i]);
+        is_resource($conn[$i]) and curl_close($conn[$i]);
     }
     return $data;
 }
