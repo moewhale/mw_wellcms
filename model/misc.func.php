@@ -1000,7 +1000,7 @@ function https_request($url, $post = '', $cookie = '', $timeout = 30, $ms = 0)
     $output = curl_exec($curl);
     // 有效URL，输出URL非URL页面内容 CURLOPT_RETURNTRANSFER 必须为false
     'GET' == $post and $output = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
-    # curl_close($curl);
+    is_resource($curl) and curl_close($curl);
     return $output;
 }
 
@@ -1021,7 +1021,7 @@ function save_image($img)
     //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
     curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
     $output = curl_exec($ch);
-    curl_close($ch);
+    is_resource($ch) and curl_close($ch);
     return $output;
 }
 
