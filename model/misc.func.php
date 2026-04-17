@@ -1000,7 +1000,7 @@ function https_request($url, $post = '', $cookie = '', $timeout = 30, $ms = 0)
     $output = curl_exec($curl);
     // 有效URL，输出URL非URL页面内容 CURLOPT_RETURNTRANSFER 必须为false
     'GET' == $post and $output = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
-    curl_close($curl);
+    # curl_close($curl);
     return $output;
 }
 
