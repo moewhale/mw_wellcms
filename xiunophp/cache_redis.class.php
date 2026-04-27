@@ -26,7 +26,7 @@ class cache_redis
         if (!$r) {
             return $this->error(-1, '连接 Redis 服务器失败。');
         }
-        //$redis->auth('foobared'); // 密码验证
+        $redis->auth($this->conf['auth']); // 密码验证
         //$redis->select('wellcms'); // 选择数据库wellcms
         $this->link = $redis;
         return $this->link;
