@@ -89,6 +89,7 @@ return array(
     'cookie_path' => '',     // 为空则表示当前目录和子目录
     'cookie_lifetime' => '8640000', // cookie生命期8640000为100天
     'auth_key' => '',
+	'redis_auth_key' => '',
     'pagesize' => 20,
     'postlist_pagesize' => 100,
     'listsize' => 100,  // 大数据量控制显示100页
